@@ -1019,7 +1019,7 @@ class RLTuner(object):
     tf.logging.debug('Key: %s', reward)
     prev_reward = reward
 
-    reward += self.reward_tonic(action)
+    reward += self.reward_tonic(action, reward_amount=50.0)
     if reward != prev_reward:
       tf.logging.debug('Tonic: %s', reward)
     prev_reward = reward
@@ -1039,7 +1039,7 @@ class RLTuner(object):
       tf.logging.debug('Reward motif: %s', reward)
     prev_reward = reward
 
-    reward += self.reward_repeated_motif(action)
+    reward += self.reward_repeated_motif(action, reward_amount=1000.0)
     if reward != prev_reward:
       tf.logging.debug('Reward repeated motif: %s', reward)
     prev_reward = reward
@@ -1051,7 +1051,7 @@ class RLTuner(object):
       tf.logging.debug('Reward preferred_intervals: %s', reward)
     prev_reward = reward
 
-    reward += self.reward_leap_up_back(action)
+    reward += self.reward_leap_up_back(action, resolving_leap_bonus=1000.0)
     if reward != prev_reward:
       tf.logging.debug('Reward leap up back: %s', reward)
     prev_reward = reward
@@ -1939,7 +1939,7 @@ class RLTuner(object):
 
     reward_batch = self.output_every_nth
     x = [reward_batch * i for i in np.arange(len(self.eval_avg_reward))]
-    start_index = start_at_epoch / self.output_every_nth
+    start_index = int(start_at_epoch / self.output_every_nth)
     plt.figure()
     plt.plot(x[start_index:], self.eval_avg_reward[start_index:])
     plt.plot(x[start_index:], self.eval_avg_music_theory_reward[start_index:])

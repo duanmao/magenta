@@ -268,6 +268,11 @@ class NoteRNNLoader(object):
     tf.logging.info('Restoring variables from checkpoint')
 
     var_dict = self.get_variable_name_dict()
+
+    # TODO(junlinzheng): fix this hack
+    var_dict["rnn_model/RNN/MultiRNNCell/Cell0/LSTMCell/B"] = var_dict.pop("rnn_model/rnn/multi_rnn_cell/cell_0/lstm_cell/bias")
+    var_dict["rnn_model/RNN/MultiRNNCell/Cell0/LSTMCell/W_0"] = var_dict.pop("rnn_model/rnn/multi_rnn_cell/cell_0/lstm_cell/kernel")
+
     with self.graph.as_default():
       saver = tf.train.Saver(var_list=var_dict)
 
